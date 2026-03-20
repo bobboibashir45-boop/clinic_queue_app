@@ -8,13 +8,15 @@ queue = []
 # Counter for total patients served
 total_served = 0
 
-# Homepage showing queue + total served + add/remove options
+# Homepage showing queue + next patient + total served + add/remove/reset options
 @app.route('/')
 def home():
     queue_list = "<br>".join([f"{i+1}. {name} <a href='/remove/{name}'>Remove</a>"
                               for i, name in enumerate(queue)])
+    next_patient = queue[0] if queue else "No patients in queue"
     return render_template_string("""
         <h1>Welcome to the Clinic Queue System</h1>
+        <h2>Next Patient: {{ next_patient }}</h2>
         <h2>Current Queue:</h2>
         <p>{{ queue_list|safe }}</p>
         <h3>Add Patient:</h3>
@@ -23,7 +25,11 @@ def home():
             <input type="submit" value="Add">
         </form>
         <h3>Total Patients Served: {{ total_served }}</h3>
-    """, queue_list=queue_list, total_served=total_served)
+        <h3>Reset Queue:</h3>
+        <form action="/reset" method="post">
+            <input type="submit" value="Reset Queue">
+        </form>
+    """, queue_list=queue_list, total_served=total_served, next_patient=next_patient)
 
 # Add patient via URL
 @app.route('/add/<patient_name>')
@@ -48,12 +54,20 @@ def remove_patient(patient_name):
         return f"Patient {patient_name} removed! Current queue length: {len(queue)}"
     return f"Patient {patient_name} not found in the queue."
 
-# View full queue (optional, still works)
+# View full queue
 @app.route('/queue')
 def view_queue():
     if not queue:
         return "The queue is currently empty."
     return "<br>".join([f"{i+1}. {name}" for i, name in enumerate(queue)])
+
+# Reset the queue
+@app.route('/reset', methods=['POST'])
+def reset_queue():
+    global queue, total_served
+    queue = []
+    total_served = 0
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
