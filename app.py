@@ -98,7 +98,7 @@ def home():
             <title>Clinic Queue System</title>
             <style>
                 body {
-                    background-color: white;
+                    background-color: brown;
                     color: black;
                     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
                     margin: 20px;
