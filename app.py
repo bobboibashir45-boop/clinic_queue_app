@@ -8,6 +8,7 @@ app = Flask(__name__)
 queue = []
 served_list = []
 total_served = 0
+dark_mode = True  # ✅ Track Dark/Light mode
 
 # ====== Helper Functions ======
 def add_patient(patient_name, priority=False):
@@ -61,7 +62,7 @@ def daily_count():
 # ====== Routes ======
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    global queue, served_list, total_served
+    global queue, served_list, total_served, dark_mode
     message = ""
     if request.method == 'POST':
         action = request.form.get('action')
@@ -86,6 +87,9 @@ def home():
         elif action == 'sort':
             sort_queue()
             message = "Queue sorted"
+        elif action == 'toggle_mode':
+            dark_mode = not dark_mode
+            message = "Mode toggled"
 
     # Prepare data for template
     queue_list = ", ".join(queue) if queue else "No patients waiting"
@@ -98,14 +102,14 @@ def home():
             <title>Clinic Queue System</title>
             <style>
                 body {
-                    background-color: brown;
-                    color: grey;
+                    background-color: {{ 'brown' if dark_mode else 'white' }};
+                    color: {{ 'grey' if dark_mode else 'black' }};
                     font-family: 'Inter', Arial, sans-serif;
                     margin: 40px;
-text-align: center; /* Push 20: Center everything */
+                    text-align: center;
                 }
                 h1, h2, h3 {
-                    color: #f5f5f7;
+                    color: {{ '#f5f5f7' if dark_mode else '#222' }};
                 }
                 input[type=text] {
                     padding: 8px;
@@ -150,6 +154,7 @@ text-align: center; /* Push 20: Center everything */
                 <button name="action" value="reset">Reset Queue</button>
                 <button name="action" value="export">Export Queue</button>
                 <button name="action" value="sort">Sort Queue</button>
+                <button name="action" value="toggle_mode">Toggle Dark/Light Mode</button>
             </form>
 
             <h2>Queue:</h2>
@@ -175,7 +180,8 @@ text-align: center; /* Push 20: Center everything */
     avg_wait_str=avg_wait_str,
     served_list=served_list,
     message=message,
-    daily_count_val=daily_count()
+    daily_count_val=daily_count(),
+    dark_mode=dark_mode
     )
 
 # ====== Run Server ======
