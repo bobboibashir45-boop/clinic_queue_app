@@ -8,7 +8,8 @@ app = Flask(__name__)
 queue = []
 served_list = []
 total_served = 0
-dark_mode = True  # ✅ Track Dark/Light mode
+dark_mode = True  # Track Dark/Light mode
+play_sound = False  # Flag to trigger notification sound
 
 # ====== Helper Functions ======
 def add_patient(patient_name, priority=False):
@@ -22,11 +23,13 @@ def remove_patient(patient_name):
         queue.remove(patient_name)
 
 def next_patient():
+    global play_sound
     if queue:
         patient = queue.pop(0)
         served_list.append({'name': patient, 'time': datetime.now()})
         global total_served
         total_served += 1
+        play_sound = True  # Trigger sound
         return patient
     return "No patients in queue"
 
@@ -62,7 +65,7 @@ def daily_count():
 # ====== Routes ======
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    global queue, served_list, total_served, dark_mode
+    global queue, served_list, total_served, dark_mode, play_sound
     message = ""
     if request.method == 'POST':
         action = request.form.get('action')
@@ -150,6 +153,14 @@ def home():
                     document.getElementById('clock').innerText = now.toLocaleTimeString();
                 }
                 setInterval(updateClock, 1000);
+
+                // Play sound if triggered
+                window.onload = function() {
+                    {% if play_sound %}
+                        var audio = new Audio("https://www.soundjay.com/button/beep-07.mp3");
+                        audio.play();
+                    {% endif %}
+                }
             </script>
         </head>
         <body onload="updateClock()">
@@ -193,7 +204,8 @@ def home():
     served_list=served_list,
     message=message,
     daily_count_val=daily_count(),
-    dark_mode=dark_mode
+    dark_mode=dark_mode,
+    play_sound=play_sound
     )
 
 # ====== Run Server ======
