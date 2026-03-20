@@ -99,9 +99,10 @@ def home():
             <style>
                 body {
                     background-color: brown;
-                    color: black;
+                    color: grey;
                     font-family: 'Inter', Arial, sans-serif;
-                    margin: 20px;
+                    margin: 40px;
+text-align: center; /* Push 20: Center everything */
                 }
                 h1, h2, h3 {
                     color: #f5f5f7;
