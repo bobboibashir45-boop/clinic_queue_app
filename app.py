@@ -139,10 +139,22 @@ def home():
                 li {
                     padding: 3px 0;
                 }
+                #clock {
+                    font-size: 1.2em;
+                    margin-bottom: 15px;
+                }
             </style>
+            <script>
+                function updateClock() {
+                    const now = new Date();
+                    document.getElementById('clock').innerText = now.toLocaleTimeString();
+                }
+                setInterval(updateClock, 1000);
+            </script>
         </head>
-        <body>
+        <body onload="updateClock()">
             <h1>Clinic Queue System</h1>
+            <div id="clock"></div>
             <p>{{ message }}</p>
 
             <form method="POST">
