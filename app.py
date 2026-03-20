@@ -18,5 +18,12 @@ def add_patient(patient_name):
     queue.append(patient_name)
     return f"Patient {patient_name} added! Current queue length: {len(queue)}"
 
+@app.route('/remove/<patient_name>')
+def remove_patient(patient_name):
+    if patient_name in queue:
+        queue.remove(patient_name)
+        return f"Patient {patient_name} removed! Current queue length: {len(queue)}"
+    return f"Patient {patient_name} not found in the queue."
+    
 if __name__ == '__main__':
     app.run(debug=True)
