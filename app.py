@@ -118,7 +118,7 @@ text-align: center; /* Push 20: Center everything */
                     margin: 5px;
                     border: none;
                     border-radius: 5px;
-                    background-color: #0a84ff;
+                    background-color: black;
                     color: white;
                     cursor: pointer;
                 }
