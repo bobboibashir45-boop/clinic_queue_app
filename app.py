@@ -100,7 +100,7 @@ def home():
                 body {
                     background-color: brown;
                     color: black;
-                    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                    font-family: 'Inter', Arial, sans-serif;
                     margin: 20px;
                 }
                 h1, h2, h3 {
